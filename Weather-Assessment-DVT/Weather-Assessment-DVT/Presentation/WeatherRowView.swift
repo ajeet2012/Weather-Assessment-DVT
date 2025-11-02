@@ -17,12 +17,12 @@ struct WeatherRowView: View {
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .padding()
             HStack {
-                Image("Property 1=01.sun-light")
+                Image(forcastItem.weather[0].main.weatherIconName())
                     .resizable()
                     .aspectRatio(contentMode: .fill)
                     .frame(width: 80, height: 80)
                 Spacer()
-                Text("28°")
+                Text(forcastItem.main.temp.description)
                     .font(.custom("Poppins-Medium", size: 50))
                     .fontWeight(.semibold)
             }

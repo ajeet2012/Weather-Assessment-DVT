@@ -27,6 +27,7 @@ struct WeatherDashboardView: View {
                     .padding(.horizontal)
                 Spacer()
                 WeatherListView(viewModel: viewModel)
+                Spacer()
             }
             .onAppear {
                 weatherLocationManager.requestForLocation()
