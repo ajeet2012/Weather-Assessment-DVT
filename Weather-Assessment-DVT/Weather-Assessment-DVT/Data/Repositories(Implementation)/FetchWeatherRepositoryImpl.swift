@@ -16,7 +16,7 @@ class FetchWeatherRepositoryImpl: FetchWeatherRepository {
         self.dataSource = dataSource
     }
     
-    func fetchWeather(lat: String?, lon: String?) async throws -> WeatherResponseDTO {
+    func fetchWeather(lat: String?, lon: String?, units: Units? = .metric) async throws -> WeatherResponseDTO {
         try await dataSource.fetchWeatherData(request: .init(lat: lat, lon: lon, appid: Constants.apiKey))        
     }
  

@@ -8,5 +8,5 @@
 import Foundation
 
 protocol FetchWeatherRepository {
-    func fetchWeather(lat: String?, lon: String?) async throws -> WeatherResponseDTO
+    func fetchWeather(lat: String?, lon: String?, units: Units?) async throws -> WeatherResponseDTO
 }

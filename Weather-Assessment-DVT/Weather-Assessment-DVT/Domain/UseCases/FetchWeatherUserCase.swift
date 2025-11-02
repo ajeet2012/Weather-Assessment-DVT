@@ -8,7 +8,7 @@
 import Foundation
 
 protocol FetchWeatherUserCaseProtocol {
-    func execute(lat: String?, lon: String?) async throws -> WeatherResponseDTO
+    func execute(lat: String?, lon: String?, units: Units?) async throws -> WeatherResponseDTO
 }
 
 struct FetchWeatherUserCase: FetchWeatherUserCaseProtocol {
@@ -19,7 +19,7 @@ struct FetchWeatherUserCase: FetchWeatherUserCaseProtocol {
         self.repository = repository
     }
     
-    func execute(lat: String?, lon: String?) async throws -> WeatherResponseDTO {
-        try await repository.fetchWeather(lat: lat, lon: lon)
+    func execute(lat: String?, lon: String?, units: Units? = .metric) async throws -> WeatherResponseDTO {
+        try await repository.fetchWeather(lat: lat, lon: lon, units: units)
     }
 }
