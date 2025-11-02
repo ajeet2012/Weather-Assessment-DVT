@@ -22,6 +22,7 @@ struct WeatherListView: View {
                 ProgressView("Loading forecast...")
             } else if let errorMessage = viewModel.errorMessage {
                 Text(errorMessage)
+                Spacer()
             } else {
                 List(viewModel.forecastDailyList, id: \.self) { item in
                     WeatherRowView()
