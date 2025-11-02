@@ -23,14 +23,14 @@ struct WeatherRowView: View {
                     .frame(width: 80, height: 80)
                 Spacer()
                 Text(forcastItem.main.temp.description)
-                    .font(.custom("Poppins-Medium", size: 50))
+                    .font(.custom("Poppins-Medium", size: 45))
                     .fontWeight(.semibold)
             }
             .padding(.horizontal)
         }
         .background(
             RoundedRectangle(cornerRadius: 25)
-                .fill(Color(.white)) // background color
+                .fill(Color(.systemBackground)) // background color
         )
     }
 }

@@ -16,6 +16,8 @@ class WeatherDashboardViewModel: ObservableObject {
     
     private let weatherUseCase: FetchWeatherUserCaseProtocol
     
+    let strings: StringsConsts = .init()
+    
     init(weatherUserCase: FetchWeatherUserCaseProtocol = FetchWeatherUserCase()){
         self.weatherUseCase = weatherUserCase
     }
@@ -53,4 +55,10 @@ class WeatherDashboardViewModel: ObservableObject {
         return firstFiveDays.values.sorted { $0.dt_txt < $1.dt_txt }
     }
     
+}
+
+extension WeatherDashboardViewModel {
+    struct StringsConsts {
+        static let headerTitle: String = "5 day Forecast"
+    }
 }

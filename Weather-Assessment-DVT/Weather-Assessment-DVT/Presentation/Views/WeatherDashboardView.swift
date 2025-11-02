@@ -20,13 +20,24 @@ struct WeatherDashboardView: View {
                 .aspectRatio(contentMode: .fill)
                 .edgesIgnoringSafeArea(.all)
             VStack {
-                Text("\(weatherLocationManager.city), \(weatherLocationManager.country)")
-                    .font(.system(size: 20, weight: .bold, design: .default))
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .padding(.top, 50)
-                    .padding(.horizontal)
+                HStack{
+                    Text(WeatherDashboardViewModel.StringsConsts.headerTitle)
+                        .font(.system(size: 20, weight: .bold, design: .default))
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .padding(.horizontal)
+                    Spacer()
+                    Text("\(weatherLocationManager.city), \(weatherLocationManager.country)")
+                        .font(.system(size: 15, weight: .bold, design: .default))
+                        .padding(.trailing)
+                }
+                .padding(.top, 50)
+                Divider()
+                    .background(.primary)
+                        .frame(height: 2)
+                
                 Spacer()
                 WeatherListView(viewModel: viewModel)
+                    .padding(.bottom)
                 Spacer()
             }
             .onAppear {
