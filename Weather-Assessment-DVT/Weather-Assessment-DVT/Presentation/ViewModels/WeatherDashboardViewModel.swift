@@ -12,7 +12,7 @@ class WeatherDashboardViewModel: ObservableObject {
     
     @Published var isLoading: Bool = false
     @Published var errorMessage: String?
-    @Published var forecastDailyList: [String] = ["Day 1", "Day 2", "Day 3"]
+    @Published var forecastList: [ForecastItem] = []
     
     private let weatherUseCase: FetchWeatherUserCaseProtocol
     
@@ -26,9 +26,8 @@ class WeatherDashboardViewModel: ObservableObject {
         print(latitude)
         print(longitude)
         do {
-            let forecastDailyList = try await weatherUseCase.execute(lat: "\(latitude)", lon: "\(longitude)")
-            //self.forecastDailyList = forecastDailyList
-            print("\(forecastDailyList.list.count)")
+            let forecastDailyList = try await weatherUseCase.execute(lat: "\(latitude)", lon: "\(longitude)", units: .metric)
+            self.forecastList = self.fetchOneEntryForEachDay(fullList: forecastDailyList.list)
             self.isLoading = false
             errorMessage = nil
         } catch {
@@ -36,7 +35,22 @@ class WeatherDashboardViewModel: ObservableObject {
             isLoading = false
         }
         
+    }
+    
+    private func fetchOneEntryForEachDay(fullList: [ForecastItem]) -> [ForecastItem] {
+        var firstFiveDays: [String: ForecastItem] = [:]
         
+        for item in fullList {
+            let datePart = String(item.dt_txt.prefix(10))
+            
+            // Keep only the first entry per date
+            if firstFiveDays[datePart] == nil {
+                firstFiveDays[datePart] = item
+            }
+        }
+        
+        // Convert to array sorted by date
+        return firstFiveDays.values.sorted { $0.dt_txt < $1.dt_txt }
     }
     
 }

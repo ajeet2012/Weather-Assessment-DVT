@@ -8,23 +8,21 @@
 import SwiftUI
 
 struct WeatherRowView: View {
-    public var day: String = "Monday"
-    public var temperature: String = "28°"
-    public var iconWeather: String = "Property 1=01.sun-light"
+    @Binding var forcastItem: ForecastItem
     var body: some View {
         VStack(spacing: 0) {
-            Text(day)
+            Text(forcastItem.dt_txt.dayFromDateString() ?? "")
                 .font(.custom("Poppins-Bold", size: 24))
                 .fontWeight(.bold)
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .padding()
             HStack {
-                Image(iconWeather)
+                Image("Property 1=01.sun-light")
                     .resizable()
                     .aspectRatio(contentMode: .fill)
                     .frame(width: 80, height: 80)
                 Spacer()
-                Text(temperature)
+                Text("28°")
                     .font(.custom("Poppins-Medium", size: 50))
                     .fontWeight(.semibold)
             }
@@ -37,6 +35,6 @@ struct WeatherRowView: View {
     }
 }
 
-#Preview {
-    WeatherRowView()
-}
+//#Preview {
+//    WeatherRowView()
+//}

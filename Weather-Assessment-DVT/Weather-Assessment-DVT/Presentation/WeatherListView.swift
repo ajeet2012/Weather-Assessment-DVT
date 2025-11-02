@@ -24,13 +24,16 @@ struct WeatherListView: View {
                 Text(errorMessage)
                 Spacer()
             } else {
-                List(viewModel.forecastDailyList, id: \.self) { item in
-                    WeatherRowView()
+                
+                
+                List($viewModel.forecastList) { item in
+                    WeatherRowView(forcastItem: item)
                         .listRowSeparator(.hidden)
                         .padding(.vertical, 8)
                         .listRowBackground(Color.clear)
                 }
                 .listStyle(PlainListStyle())
+               
             }
         }
     }
