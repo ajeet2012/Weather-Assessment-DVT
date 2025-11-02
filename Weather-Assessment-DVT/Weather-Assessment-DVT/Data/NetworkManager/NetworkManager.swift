@@ -39,42 +39,57 @@ enum NetworkError: Error {
     }
 }
 
+// MARK: - Network Query Type
+enum NetworkQueryType {
+    case path([String: String]) // parameters in URL query
+    case json([String: Any])    // parameters in JSON body
+    case none
+}
+
 
 // MARK: - Requestable Protocol
 protocol Requestable {
-    var path: String { get }
+    var endpoint: String { get } // endpoint path, e.g., "/data/2.5/forecast"
     var method: HTTPMethod { get }
     var headers: [String: String]? { get }
-    var parameters: [String: Any]? { get }
-    var responseType: Decodable.Type { get }
+    var queryType: NetworkQueryType { get }
 }
 
 // MARK: - Network Manager
 class NetworkManager {
     
     static let shared = NetworkManager() // singleton
-    private let baseUrlString = "https://api.openweathermap.org"
+    private let baseURL = "https://api.openweathermap.org"
     private init() {}
     
     // Generic async request method
     func request<T: Decodable>(_ requestable: Requestable) async throws -> T {
-        guard let url = URL(string: requestable.path) else {
+        var urlString = baseURL + requestable.endpoint
+        var bodyData: Data? = nil
+        
+        switch requestable.queryType {
+        case .path(let params):
+            if var urlComponents = URLComponents(string: urlString) {
+                urlComponents.queryItems = params.map { URLQueryItem(name: $0.key, value: $0.value) }
+                guard let fullURL = urlComponents.url else { throw NetworkError.invalidURL }
+                urlString = fullURL.absoluteString
+            }
+        case .json(let params):
+            bodyData = try? JSONSerialization.data(withJSONObject: params, options: [])
+        case .none:
+            break
+        }
+        
+        guard let url = URL(string: urlString) else {
             throw NetworkError.invalidURL
         }
+        
+        print("url - \(url.absoluteString)")
         
         var request = URLRequest(url: url)
         request.httpMethod = requestable.method.rawValue
         request.allHTTPHeaderFields = requestable.headers
-        
-//        if let parameters = requestable.parameters {
-//            do {
-//                let jsonData = try JSONSerialization.data(withJSONObject: parameters, options: [])
-//                request.httpBody = jsonData
-//            } catch {
-//                print("Error encoding parameters: \(error)")
-//            }
-//        }
-        
+        request.httpBody = bodyData
         do {
             let (data, response) = try await URLSession.shared.data(for: request)
             
